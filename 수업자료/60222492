@@ -1,0 +1,12 @@
+sec=1 
+min= sec*60  
+
+seconds_per_hour = 60*min
+
+seconds_per_day = seconds_per_hour*24
+
+print(seconds_per_hour,"\n")
+print(seconds_per_day,"\n")
+print(seconds_per_day/seconds_per_hour,"\n")
+print(seconds_per_day//seconds_per_hour,"\n")
+
