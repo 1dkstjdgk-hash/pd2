@@ -13,6 +13,8 @@ v2 변경사항:
     py zeus_integrated_dashboard.py --server        HTTP 서버 (포트 8876) ★권장
     py zeus_integrated_dashboard.py --server --live  + 5분 자동갱신
     py zeus_integrated_dashboard.py                  HTML 파일만 생성
+    cd <project-dir>
+    py -3 zeus_integrated_dashboard.py
 """
 from __future__ import annotations
 
