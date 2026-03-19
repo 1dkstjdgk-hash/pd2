@@ -877,7 +877,8 @@ async function refreshDash(){
 async function runAnalyzer(){
   const tk=document.getElementById('an-tk').value.trim();
   if(!tk){alert('티커 입력 필요');return;}
-  if({str(PUBLIC_SITE).lower()} && /[,\s]+/.test(tk)){alert('공개 Analyzer는 티커 1개만 입력할 수 있습니다.');return;}
+  const publicAnalyzer = document.body && document.body.dataset && document.body.dataset.publicAnalyzer === '1';
+  if(publicAnalyzer && /[,\s]+/.test(tk)){alert('공개 Analyzer는 티커 1개만 입력할 수 있습니다.');return;}
   setBtn('an-btn','<span class="sp"></span> 분석 중…',true);
   const inj=document.getElementById('an-inject');
   if(inj)inj.innerHTML='';
@@ -1834,7 +1835,7 @@ function closeSectorDetail(ev){{
 
     return f"""<!DOCTYPE html>
 <html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ZEUS Integrated Dashboard</title>{_CSS}{dashboard_style}</head><body>
+<title>ZEUS Integrated Dashboard</title>{_CSS}{dashboard_style}</head><body data-public-analyzer="{1 if analyzer_enabled else 0}">
 <div id="hdr">
   <div id="logo"><div class="logo-dot"></div>ZEUS <span>Trading System</span></div>
   <nav id="nav">

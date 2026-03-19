@@ -98,7 +98,7 @@ body{background:var(--bg);color:var(--text);font-family:'Pretendard','Segoe UI',
 .sector-detail-overlay{position:fixed;inset:0;background:rgba(9,15,27,.36);backdrop-filter:blur(10px);display:none;align-items:stretch;justify-content:flex-end;z-index:1200}.sector-detail-overlay.on{display:flex}.sector-detail-panel{width:min(720px,100%);height:100%;padding:24px 22px 26px;border-radius:32px 0 0 32px;overflow-y:auto;background:rgba(253,254,255,.95)}.sector-detail-head{display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:18px}.sector-close-btn{border:none;background:#eef3ff;color:#4564d1;padding:10px 14px;border-radius:999px;font-weight:700;cursor:pointer}.sector-detail-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}.sector-detail-stats .stat{padding:12px 14px;border-radius:18px;background:#f6f8fc;border:1px solid rgba(20,32,58,.06)}.sector-detail-stats .stat span{display:block;font-size:.72rem;color:#73819a}.sector-detail-stats .stat strong{display:block;margin-top:6px;font-size:1rem;color:#10203a}.sector-detail-table-wrap{border:1px solid rgba(21,32,51,.08);border-radius:20px;overflow:hidden;background:#fff}.sector-detail-table{width:100%;border-collapse:collapse}.sector-detail-table th,.sector-detail-table td{padding:13px 14px;border-bottom:1px solid rgba(21,32,51,.06);text-align:left;font-size:.88rem}.sector-detail-table th{background:#f7f9fc;color:#6d7b94;font-size:.74rem;text-transform:uppercase;letter-spacing:.04em}.sector-detail-table td strong{font-size:.95rem;color:#10203a}.row-tags{display:flex;gap:6px;flex-wrap:wrap}.row-tag{padding:5px 8px;border-radius:999px;background:#eef3ff;color:#4564d1;font-size:.7rem;font-weight:700}.row-score-main{padding:7px 12px;font-size:.82rem;background:linear-gradient(135deg,#243b8a,#5b6fff);color:#fff;box-shadow:0 8px 22px rgba(79,109,245,.22)}
 @media (max-width:1200px){.hero-board,.summary-grid,.sector-card-grid,.hero-sector-strip{grid-template-columns:1fr 1fr}.board-head{display:block}.board-head p{margin-top:10px}}
 @media (max-width:820px){.dash-shell{padding:18px 14px 30px}.hero-board,.summary-grid,.sector-card-grid,.hero-sector-strip,.hero-stat-grid,.sector-detail-stats{grid-template-columns:1fr}.hero-copy h1{font-size:1.55rem}.sector-detail-panel{width:100%;border-radius:28px 28px 0 0;height:auto;max-height:90vh;margin-top:auto}}
-</style></head><body>
+</style></head><body data-public-analyzer="0">
 <div id="hdr">
   <div id="logo"><div class="logo-dot"></div>ZEUS <span>Trading System</span></div>
   <nav id="nav">
@@ -121,7 +121,7 @@ body{background:var(--bg);color:var(--text);font-family:'Pretendard','Segoe UI',
   국면→Trading <span class="lbdg lok">🔗 연동</span>
   <span style='color:var(--muted)'>│</span> 신호 <b style='color:var(--accent)'>4종목</b> (2026-03-19)
   <span style='color:var(--muted)'>│</span> <b style='color:#d29922'>🟡 횡보장</b> F&G:50.0 → max_w <b style='color:var(--yellow)'>30%</b>
-  <span style="margin-left:auto;color:var(--muted);font-size:.75rem">2026-03-19 22:28</span>
+  <span style="margin-left:auto;color:var(--muted);font-size:.75rem">2026-03-19 23:42</span>
 </div>
 <div id="sbar">
   <span><span class="dot dg"></span>정상</span>
@@ -472,7 +472,8 @@ async function refreshDash(){
 async function runAnalyzer(){
   const tk=document.getElementById('an-tk').value.trim();
   if(!tk){alert('티커 입력 필요');return;}
-  if({str(PUBLIC_SITE).lower()} && /[,\s]+/.test(tk)){alert('공개 Analyzer는 티커 1개만 입력할 수 있습니다.');return;}
+  const publicAnalyzer = document.body && document.body.dataset && document.body.dataset.publicAnalyzer === '1';
+  if(publicAnalyzer && /[,\s]+/.test(tk)){alert('공개 Analyzer는 티커 1개만 입력할 수 있습니다.');return;}
   setBtn('an-btn','<span class="sp"></span> 분석 중…',true);
   const inj=document.getElementById('an-inject');
   if(inj)inj.innerHTML='';
