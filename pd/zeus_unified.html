@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZEUS Trading System</title><style>
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{
+  --bg:#0a0b0e;--bg2:#12141a;--panel:#16181f;--panel2:#1c1f28;
+  --border:#1f2333;--border2:#252a3a;
+  --accent:#5b6fff;--accent-soft:rgba(91,111,255,.12);--accent-glow:rgba(91,111,255,.25);
+  --green:#22c55e;--green-soft:rgba(34,197,94,.12);
+  --red:#ef4444;--red-soft:rgba(239,68,68,.1);
+  --yellow:#f59e0b;--yellow-soft:rgba(245,158,11,.1);
+  --text:#e8eaf0;--text2:#9aa0b8;--text3:#555d7a;
+  --mono:'JetBrains Mono',monospace;--r:12px;--r2:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Pretendard','Segoe UI',system-ui,sans-serif;font-size:14px;line-height:1.6}
+#hdr{position:sticky;top:0;z-index:1000;background:rgba(10,11,14,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;height:56px;padding:0 24px;}
+#logo{font-size:1.05rem;font-weight:700;color:var(--text);letter-spacing:-.3px;white-space:nowrap;margin-right:28px;display:flex;align-items:center;gap:8px;}
+#logo .logo-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);}
+#logo span{color:var(--text3);font-weight:400;font-size:.76rem;margin-left:2px}
+#nav{display:flex;gap:2px;flex:1}
+.ztab{padding:6px 14px;border-radius:var(--r2);border:none;cursor:pointer;font-size:.81rem;font-weight:500;color:var(--text3);background:transparent;transition:all .15s;white-space:nowrap;font-family:inherit;}
+.ztab:hover{color:var(--text);background:var(--panel)}
+.ztab.on{color:var(--accent);background:var(--accent-soft)}
+.ztab .bdg{margin-left:4px;padding:1px 5px;border-radius:9px;font-size:.67rem;font-weight:600;background:var(--accent);color:#fff;}
+#sbar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:0 24px;height:34px;font-size:.74rem;color:var(--text3);background:var(--bg2);border-bottom:1px solid var(--border);}
+.dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:3px}
+.dg{background:var(--green)}.dy{background:var(--yellow)}.dr{background:var(--red)}
+#lnk{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:0 24px;height:34px;font-size:.74rem;background:var(--bg2);border-bottom:1px solid var(--border);}
+.lbdg{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:9px;font-size:.69rem;font-weight:500}
+.lok{background:rgba(34,197,94,.12);color:var(--green)}
+.lwrn{background:rgba(245,158,11,.12);color:var(--yellow)}
+.lno{background:rgba(239,68,68,.1);color:var(--red)}
+.zpnl{display:none}.zpnl.on{display:block;overflow-y:auto;max-height:calc(100vh - 124px);animation:fadeIn .18s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+.zframe{width:100%;border:none;min-height:calc(100vh - 124px)}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:24px;}
+.card h2{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:4px;letter-spacing:-.2px;}
+.card p{color:var(--text2);font-size:.81rem;line-height:1.7;margin-bottom:16px}
+.frow{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.frow label{font-size:.74rem;color:var(--text3);font-weight:500}
+.frow input,.frow select,.frow textarea{padding:9px 12px;border-radius:var(--r2);border:1px solid var(--border2);background:var(--bg2);color:var(--text);font-size:.85rem;font-family:inherit;transition:border-color .15s;}
+.frow input:focus,.frow select:focus,.frow textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+.frow textarea{resize:vertical;min-height:70px}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px}
+.acts{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.btn{padding:8px 16px;border-radius:var(--r2);border:1px solid var(--border2);cursor:pointer;font-size:.81rem;font-weight:600;transition:all .15s;background:transparent;color:var(--text2);font-family:inherit;}
+.btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.btn.pri{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 2px 12px var(--accent-glow);}
+.btn.pri:hover{background:#4a5cf0}
+.btn.ok{border-color:var(--green);color:var(--green)}
+.btn.ok:hover{background:rgba(34,197,94,.1)}
+.btn.warn{border-color:var(--yellow);color:var(--yellow)}
+.btn.warn:hover{background:rgba(245,158,11,.1)}
+.btn:disabled{opacity:.35;cursor:not-allowed;pointer-events:none}
+.logbox{display:none;margin-top:12px;padding:12px;border-radius:var(--r2);background:var(--bg);border:1px solid var(--border);font-family:var(--mono);font-size:.74rem;min-height:56px;max-height:200px;overflow-y:auto;line-height:1.7;}
+.logbox.on{display:block}
+.ll{color:var(--text2)}.ls{color:var(--green)}.lw{color:var(--yellow)}.le{color:var(--red)}
+.prog-wrap{height:2px;border-radius:1px;background:var(--border);margin-top:12px;overflow:hidden;display:none;}
+.prog-wrap.on{display:block}
+.prog-bar{height:100%;width:0;background:var(--accent);border-radius:1px;transition:width .3s;animation:prog-pulse 1.8s ease-in-out infinite;}
+@keyframes prog-pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.sp{display:inline-block;width:10px;height:10px;border-radius:50%;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;animation:spin .7s linear infinite;margin-right:5px;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{padding:4px 10px;border-radius:20px;font-size:.75rem;font-weight:600;background:var(--accent-soft);color:var(--accent);border:1px solid rgba(91,111,255,.18);cursor:pointer;transition:all .15s;}
+.chip:hover{background:var(--accent);color:#fff}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;padding:20px 24px}
+.radio-card{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:var(--r2);border:1px solid var(--border2);background:var(--bg2);cursor:pointer;transition:all .15s;font-size:.83rem;color:var(--text2);}
+.radio-card:hover{border-color:var(--accent);color:var(--text)}
+.radio-card input[type=radio]{accent-color:var(--accent)}
+.mode-group{display:flex;gap:8px;margin-bottom:14px}
+.mode-group .radio-card{flex:1}
+.res{padding:0 24px 24px;display:none}.res.on{display:block}
+.resfrm{width:100%;border:none;min-height:700px;border-radius:var(--r);}
+.panel-wrap{max-width:660px;margin:24px auto;display:flex;flex-direction:column;gap:16px;padding:0 24px}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.input-strip{position:sticky;top:0;z-index:100;background:rgba(10,11,14,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;}
+.an-inject{padding:16px 24px}
+</style></head><body>
+<div id="hdr">
+  <div id="logo"><div class="logo-dot"></div>ZEUS <span>Trading System</span></div>
+  <nav id="nav">
+    <button class="ztab" id="t0" onclick="sw(0)">Dashboard</button>
+    <button class="ztab" id="t1" onclick="sw(1)">Analyzer</button>
+    <button class="ztab" id="t2" onclick="sw(2)">Backtest<span class='bdg'>4</span></button>
+    <button class="ztab" id="t3" onclick="sw(3)">Screener</button>
+    <button class="ztab" id="t4" onclick="sw(4)">Trading<span class='bdg'>3</span></button>
+  </nav>
+  <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+    <span id="clk" style="font-family:monospace;font-size:.75rem;color:var(--muted)"></span>
+    <button class="btn pri" id="rfbtn" onclick="refreshDash()">갱신</button>
+  </div>
+</div>
+<div id="lnk">
+  <span style="color:var(--muted);font-weight:600;font-size:.76rem">모듈</span> <span style='color:#3fb950;font-size:.75rem'>✅ dashboard  <small style=color:#6e7681>(zeus_dashboard.py)</small></span> &nbsp; <span style='color:#3fb950;font-size:.75rem'>✅ analyzer  <small style=color:#6e7681>(zeus_analyzer.py)</small></span> &nbsp; <span style='color:#3fb950;font-size:.75rem'>✅ backtest  <small style=color:#6e7681>(zeus_backtest.py)</small></span> &nbsp; <span style='color:#3fb950;font-size:.75rem'>✅ trading  <small style=color:#6e7681>(zeus_trading.py)</small></span> &nbsp; <span style='color:#3fb950;font-size:.75rem'>✅ screener  <small style=color:#6e7681>(screener.py)</small></span>
+  <span style="color:var(--border)">│</span>
+  Backtest→Trading <span class="lbdg lok">🔗 연동</span>
+  Screener→Trading <span class="lbdg lok">🔗 연동</span>
+  국면→Trading <span class="lbdg lok">🔗 연동</span>
+  <span style='color:var(--muted)'>│</span> 신호 <b style='color:var(--accent)'>4종목</b> (2026-03-19)
+  <span style='color:var(--muted)'>│</span> <b style='color:#d29922'>🟡 횡보장</b> F&G:50.0 → max_w <b style='color:var(--yellow)'>30%</b>
+  <span style="margin-left:auto;color:var(--muted);font-size:.75rem">2026-03-19 19:22</span>
+</div>
+<div id="sbar">
+  <span><span class="dot dg"></span>정상</span>
+  <span>포지션 <b>3종목</b></span>
+  <span>평가금액 <b>$1,086</b></span>
+</div>
+
+<!-- 탭0: Dashboard -->
+<div class="zpnl" id="p0">
+  <div id="dash-log" class="logbox" style="margin:10px 20px 0"></div>
+  <iframe class="zframe" id="dash-frm" src="zeus_out_dashboard.html"></iframe>
+</div>
+
+<!-- 탭1: Analyzer -->
+<div class="zpnl" id="p1">
+  <!-- 입력 폼: 상단 고정 스트립 -->
+  <div style="position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px">
+    <div style="flex:2;min-width:200px">
+      <label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:4px">티커 (콤마 구분)</label>
+      <input id="an-tk" type="text" placeholder="NVDA, AAPL, META, TSLA"
+        style="width:100%;padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:#0d1117;color:var(--text);font-size:.88rem">
+    </div>
+    <div style="flex:1;min-width:110px">
+      <label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:4px">기간</label>
+      <select id="an-pd" style="width:100%;padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:#0d1117;color:var(--text);font-size:.88rem">
+        <option value="2y" selected>2년 (권장)</option><option value="1y">1년</option>
+        <option value="3y">3년</option><option value="5y">5년</option>
+      </select>
+    </div>
+    <div style="flex:1;min-width:120px">
+      <label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:4px">계좌 (USD)</label>
+      <input id="an-cap" type="number" value="100000" min="1000"
+        style="width:100%;padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:#0d1117;color:var(--text);font-size:.88rem">
+    </div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <button class="btn pri" id="an-btn" onclick="runAnalyzer()" style="white-space:nowrap">분석 실행</button>
+    </div>
+  </div>
+  <!-- 진행 바 + 로그 (컴팩트) -->
+  <div style="padding:0 20px">
+    <div class="prog-wrap" id="an-prog"><div class="prog-bar"></div></div>
+    <div class="logbox" id="an-log"></div>
+  </div>
+  <!-- 결과 직접 주입 영역 (스크롤은 탭 패널이 담당) -->
+  <div id="an-inject" class="an-inject"></div>
+</div>
+
+<!-- 탭2: Backtest -->
+<div class="zpnl" id="p2">
+  <div class="panel-wrap">
+    <div class="card">
+      <div style="font-size:.7rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px">Backtest Engine</div>
+      <h2>SmartScore 팩터 검증</h2>
+      <p>완료 후 상위 종목이 <b style="color:var(--text)">zeus_signals.json</b>에 자동 저장됩니다.<br>
+         전체모드 최초 실행 90~150분 · 종목 직접 입력 수 초~수 분</p>
+
+      <!-- 실행 모드 선택 -->
+      <div class="mode-group">
+        <label class="radio-card" id="bt-lbl-full">
+          <input type="radio" name="bt-mode" value="full" id="bt-mode-full" checked onchange="btModeChange()">
+          <div>
+            <div style="font-weight:600;color:var(--text);font-size:.84rem">전체 유니버스</div>
+            <div style="font-size:.74rem;color:var(--text3);margin-top:2px">~900종목 · 90~150분</div>
+          </div>
+        </label>
+        <label class="radio-card" id="bt-lbl-custom">
+          <input type="radio" name="bt-mode" value="custom" id="bt-mode-custom" onchange="btModeChange()">
+          <div>
+            <div style="font-weight:600;color:var(--text);font-size:.84rem">종목 직접 입력</div>
+            <div style="font-size:.74rem;color:var(--text3);margin-top:2px">수 초~수 분</div>
+          </div>
+        </label>
+      </div>
+
+      <!-- 전체 모드 옵션 -->
+      <div id="bt-full-opts">
+        <div class="frow">
+          <label>대상 티어</label>
+          <select id="bt-tier">
+            <option value="all" selected>전체 (~900종목)</option>
+            <option value="tier1">TIER1 — 대형주 200종목</option>
+            <option value="tier2">TIER2 — 중형 모멘텀 200종목</option>
+            <option value="tier3">TIER3 — 소형/고베타 84종목</option>
+            <option value="tier4">TIER4 — Russell 2000 확장</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 커스텀 모드 입력 -->
+      <div id="bt-custom-opts" style="display:none">
+        <div class="frow">
+          <label>티커 입력 (콤마 또는 공백 구분)</label>
+          <textarea id="bt-tickers" placeholder="예) AAPL MSFT NVDA TSLA PLTR"></textarea>
+          <small style="color:var(--text3);font-size:.73rem">SPY는 자동 포함 · 같은 TIER 종목 2개 이상 권장</small>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+        <span id="sig-count" style="color:var(--green);font-weight:700;font-size:.82rem">—</span>
+        <span style="color:var(--text3);font-size:.76rem">저장된 종목</span>
+      </div>
+
+      <div class="acts">
+        <button class="btn pri" id="bt-btn" onclick="runBacktest()">백테스트 실행</button>
+        <button class="btn ok" onclick="loadSigs()">신호 로드</button>
+      </div>
+    <div class="prog-wrap" id="bt-prog"><div class="prog-bar"></div></div>
+    <div class="logbox" id="bt-log"></div>
+  </div>
+  <div class="card" id="sig-card" style="margin:0 20px 16px;display:block">
+    <h2>신호 종목  <small style='color:var(--muted);font-weight:400;font-size:.8rem'>(2026-03-19)</small></h2>
+    <div class="chips" id="sig-chips"><span class="chip">SMR</span><span class="chip">USEG</span><span class="chip">SIDU</span><span class="chip">OKLO</span></div>
+    <div style="margin-top:10px;font-size:.8rem;color:var(--muted)">
+      Trading Commander에 자동 로드됩니다.
+      <button class="btn ok" style="padding:2px 9px;font-size:.75rem;margin-left:8px" onclick="sigToTrading()">Trading으로 이동</button>
+    </div>
+  </div>
+  <div class="res" id="bt-res" style="padding:0 20px 20px"><iframe class="resfrm" id="bt-frm" style="min-height:700px"></iframe></div>
+</div>
+
+<!-- 탭3: Screener -->
+<div class="zpnl" id="p3">
+  <div class="panel-wrap"><div class="card">
+    <div style="font-size:.7rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px">Screener</div><h2>반등 응축 종목 탐색</h2>
+    <p>낙폭 15%↑ · 반등 10~30% · 이평선 수렴 · OBV 상승 · Volume Dry-up<br>완료 후 <b style="color:var(--green)">Trading 탭 자동 연동</b></p>
+
+    <!-- 모드 선택 -->
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;
+                    padding:10px 14px;border-radius:8px;border:1px solid var(--border);
+                    background:#0a0f16" id="sc-lbl-all">
+        <input type="radio" name="sc-mode" value="all" checked
+               onchange="scModeChange(this)"
+               style="accent-color:var(--accent);width:15px;height:15px">
+        <span>
+          <b style="color:var(--text)">전체 자동 수집</b>
+          <span style="color:var(--muted);font-size:.8rem;margin-left:8px">
+            S&amp;P500 + S&amp;P400 + S&amp;P600 + Russell2000 ≈ 3,000종목
+            <b style="color:var(--yellow)"> (약 3~5분)</b>
+          </span>
+        </span>
+      </label>
+      <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;
+                    padding:10px 14px;border-radius:8px;border:1px solid var(--border);
+                    background:#0a0f16" id="sc-lbl-custom">
+        <input type="radio" name="sc-mode" value="custom"
+               onchange="scModeChange(this)"
+               style="accent-color:var(--accent);width:15px;height:15px;margin-top:3px">
+        <span style="flex:1">
+          <b style="color:var(--text)">직접 입력</b>
+          <span style="color:var(--muted);font-size:.8rem;margin-left:8px">원하는 종목만 빠르게 검사 (수초)</span>
+          <input id="sc-custom-tk" type="text" disabled
+            placeholder="예: AAPL, NVDA, MSFT, TSLA, AMD"
+            style="display:block;width:100%;margin-top:8px;padding:7px 10px;
+                   border-radius:7px;border:1px solid var(--border);
+                   background:#0d1117;color:var(--text);font-size:.88rem;
+                   opacity:.4;cursor:not-allowed"
+            onkeydown="if(event.key==='Enter')runScreener()">
+        </span>
+      </label>
+    </div>
+
+    <div class="acts">
+      <button class="btn pri" id="sc-btn" onclick="runScreener()">스크리닝 실행</button>
+      <button class="btn ok" onclick="loadScreenerResult()">📥 저장 결과 로드</button>
+    </div>
+    <div class="prog-wrap" id="sc-prog"><div class="prog-bar"></div></div>
+    <div class="logbox" id="sc-log"></div>
+  </div>
+  <div class="card" id="sc-card" style="margin:0 20px 16px;display:none">
+    <h2>🎯 통과 종목 &nbsp;<span id="sc-count" style="color:var(--green);font-weight:700"></span></h2>
+    <div class="chips" id="sc-chips"></div>
+    <div style="margin-top:10px;font-size:.8rem;color:var(--muted)">
+      급락 후 응축 중인 종목입니다.
+      <button class="btn ok" style="padding:2px 9px;font-size:.75rem;margin-left:8px"
+        onclick="scToTrading()">Trading으로 이동</button>
+    </div>
+  </div>
+</div>
+
+<!-- 탭4: Trading -->
+<div class="zpnl" id="p4">
+  <div style='margin:14px 20px;padding:9px 14px;border-radius:8px;border:1px solid #d29922;font-size:.84rem'>국면: <b style='color:#d29922'>🟡 횡보장</b>  F&G: <b>50.0</b>  → max_weight <b style='color:var(--yellow)'>30%</b> 자동 적용</div>
+  <div class="tgrid">
+    <div class="card" style="margin:0">
+      <h2>Position Commander</h2>
+      <p>포지션 사이징 (ERC / Kelly / EW)<br>Backtest 신호 자동 로드 · 국면별 max_weight 자동 조정</p>
+      <div class="frow"><label>티커 (비우면 Backtest 신호 자동 로드)</label>
+        <input id="cmd-tk" type="text" value="SMR, USEG, SIDU, OKLO" placeholder="NVDA, META, AMZN  또는  공백"></div>
+      <div class="fgrid">
+        <div class="frow"><label>투자금액 (USD)</label><input id="cmd-cap" type="number" value="100000" min="1000"></div>
+        <div class="frow"><label>전략</label>
+          <select id="cmd-st"><option value="1" selected>Risk Parity (ERC)</option><option value="2">Half-Kelly</option><option value="3">Equal Weight</option></select></div>
+      </div>
+      <div class="acts">
+        <button class="btn pri" id="cmd-btn" onclick="runCmd()">포지션 계산</button>
+        <button class="btn" onclick="loadSigTk()">신호 로드</button>
+      </div>
+      <div class="logbox" id="cmd-log"></div>
+    </div>
+    <div class="card" style="margin:0">
+      <h2>Portfolio Tracker</h2>
+      <p>실시간 P&L  +  SL/TP 경보  +  알파 추적</p>
+      <div style="margin-bottom:12px;font-size:.84rem;color:var(--green)">✅ 3개 포지션  $1,086</div>
+      <div class="acts">
+        <button class="btn pri" onclick="runTracker()">P&L 조회</button>
+        <button class="btn ok" onclick="showAddPos()">포지션 추가</button>
+        <button class="btn warn" onclick="doRemovePos()">청산</button>
+      </div>
+      <div id="add-pos" style="display:none;margin-top:13px;border-top:1px solid var(--border);padding-top:13px">
+        <div class="fgrid">
+          <div class="frow"><label>티커</label><input id="pos-tk" type="text" placeholder="NVDA"></div>
+          <div class="frow"><label>수량</label><input id="pos-sh" type="number" min="1" value="10"></div>
+          <div class="frow"><label>매수단가 ($)</label><input id="pos-cost" type="number" min="0.01" step="0.01"></div>
+          <div class="frow"><label>매수일</label><input id="pos-dt" type="date"></div>
+        </div>
+        <div class="frow"><label>메모</label><input id="pos-note" type="text" placeholder="예: 1차 매수"></div>
+        <div class="acts">
+          <button class="btn pri" onclick="doAddPos()">저장</button>
+          <button class="btn" onclick="document.getElementById('add-pos').style.display='none'">취소</button>
+        </div>
+      </div>
+      <div class="logbox" id="trk-log"></div>
+    </div>
+    <div class="card" style="margin:0">
+      <h2>Sentiment Scanner</h2>
+      <p>뉴스 감성 + 어닝 서프라이즈 + 내부자 거래 + 공매도</p>
+      <div class="frow"><label>티커 (비우면 보유 포지션 전체)</label>
+        <input id="sent-tk" type="text" placeholder="NVDA, TSLA  또는  공백"></div>
+      <div class="acts"><button class="btn pri" id="sent-btn" onclick="runSent()">감성 스캔</button></div>
+      <div class="logbox" id="sent-log"></div>
+    </div>
+  </div>
+  <div id="trd-inject" style="padding:0 20px 30px"></div>
+</div>
+<script>
+function sw(n){
+  for(let i=0;i<5;i++){
+    document.getElementById('t'+i).classList.toggle('on',i===n);
+    document.getElementById('p'+i).classList.toggle('on',i===n);
+  }
+  localStorage.setItem('zt',n);
+}
+(()=>sw(+localStorage.getItem('zt')||0))();
+(function tick(){
+  const el=document.getElementById('clk');
+  if(el){const n=new Date(Date.now()+9*3600e3);
+    el.textContent='KST '+n.toISOString().replace('T',' ').slice(0,19);}
+  setTimeout(tick,1000);
+})();
+
+async function apiPost(ep,body={}){
+  try{
+    const r=await fetch('/run/'+ep,{method:'POST',
+      headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    return await r.json();
+  }catch(e){return{ok:false,error:'네트워크 오류: '+e}}
+}
+async function apiGet(url){
+  try{const r=await fetch(url);return await r.json();}catch(e){return{};}
+}
+function setBtn(id,lbl,dis=false){
+  const el=document.getElementById(id);
+  if(!el)return;el.innerHTML=lbl;el.disabled=dis;
+}
+function showRes(resId,frmId,src){
+  // fetch -> inject (iframe cache bypass)
+  const el=document.getElementById(resId);
+  if(el)el.classList.add('on');
+  const frm=document.getElementById(frmId);
+  if(!frm)return;
+  fetch('/'+src+'?t='+Date.now())
+    .then(r=>r.text())
+    .then(html=>{
+      frm.srcdoc=html; // srcdoc는 매번 덮어쓰므로 캐시 없음
+    })
+    .catch(()=>{frm.src=src+'?t='+Date.now();});
+}
+async function injectHtml(injId,htmlFile){
+  const inj=document.getElementById(injId);
+  if(!inj)return;
+  try{
+    const res=await fetch('/'+htmlFile+'?t='+Date.now());
+    const raw=await res.text();
+    const m=raw.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+    inj.innerHTML=m?m[1]:raw;
+    inj.scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(e){inj.innerHTML='<p style="color:var(--red);padding:20px">❌ 로드 실패: '+e+'</p>';}
+}
+function addLine(box,text){
+  const cls=text.startsWith('❌')?'le':text.startsWith('⚠')?'lw':text.startsWith('✅')?'ls':'ll';
+  const d=document.createElement('div');d.className=cls;d.textContent=text;
+  box.appendChild(d);box.scrollTop=box.scrollHeight;
+}
+
+// 실시간 로그 폴링
+async function pollJob(jobId,logBoxId,progId,onDone){
+  const box=document.getElementById(logBoxId);
+  const prog=progId?document.getElementById(progId):null;
+  const bar=prog?prog.querySelector('.prog-bar'):null;
+  if(box){box.className='logbox on';box.innerHTML='';}
+  if(prog)prog.classList.add('on');
+  let lastLen=0;
+  while(true){
+    const d=await apiGet('/run/job_log?id='+jobId);
+    if(!d||!Array.isArray(d.lines)){await new Promise(r=>setTimeout(r,2000));continue;}
+    const newLines=d.lines.slice(lastLen);lastLen=d.lines.length;
+    if(box&&newLines.length){newLines.forEach(l=>addLine(box,l));}
+    if(bar){
+      const j=d.lines.join('\n');
+      let pct=5;
+      if(j.includes('[1/3]'))pct=10;
+      const ticks=(j.match(/✅.*?:/g)||[]).length;
+      if(ticks>0)pct=Math.min(60,10+ticks);
+      if(j.includes('[2/3]'))pct=65;
+      if(j.includes('[3/3]'))pct=85;
+      if(d.done)pct=100;
+      bar.style.width=pct+'%';
+    }
+    if(d.done){if(onDone)onDone(d.result);break;}
+    await new Promise(r=>setTimeout(r,2000));
+  }
+}
+
+// Dashboard
+async function refreshDash(){
+  setBtn('rfbtn','<span class="sp"></span> 갱신 중…',true);
+  const d=await apiPost('dashboard_bg');
+  if(d.job_id){
+    document.getElementById('dash-log').className='logbox on';
+    document.getElementById('dash-log').innerHTML='';
+    await pollJob(d.job_id,'dash-log',null,r=>{
+      if(r&&r.ok){
+        document.getElementById('dash-frm').src=r.html+'?t='+Date.now();
+        setTimeout(()=>location.reload(),1500);
+      }
+    });
+  }
+  setBtn('rfbtn','🔄 갱신',false);
+}
+
+// Analyzer
+async function runAnalyzer(){
+  const tk=document.getElementById('an-tk').value.trim();
+  if(!tk){alert('티커 입력 필요');return;}
+  setBtn('an-btn','<span class="sp"></span> 분석 중…',true);
+  const inj=document.getElementById('an-inject');
+  if(inj)inj.innerHTML='';
+  const d=await apiPost('analyzer_bg',{
+    tickers:tk,period:document.getElementById('an-pd').value,
+    account:+document.getElementById('an-cap').value});
+  if(!d.job_id){
+    const b=document.getElementById('an-log');b.className='logbox on';
+    b.innerHTML='<div class="le">❌ '+(d.error||'실행 실패')+'</div>';
+    setBtn('an-btn','▶ 분석 실행',false);return;
+  }
+  await pollJob(d.job_id,'an-log','an-prog',async r=>{
+    setBtn('an-btn','▶ 분석 실행',false);
+    if(r&&r.ok&&r.html&&inj){
+      // HTML 파일을 fetch해서 body 내용만 추출해 직접 주입
+      try{
+        const res=await fetch('/'+r.html+'?t='+Date.now());
+        const raw=await res.text();
+        // <body> 태그 내부만 추출
+        const m=raw.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+        inj.innerHTML=m?m[1]:raw;
+      }catch(e){
+        inj.innerHTML='<p style="color:var(--red);padding:20px">❌ 결과 로드 실패: '+e+'</p>';
+      }
+      // 결과 상단으로 부드럽게 스크롤
+      inj.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  });
+}
+
+// Backtest 모드 토글
+function btModeChange(){
+  const isFull = document.getElementById('bt-mode-full').checked;
+  document.getElementById('bt-full-opts').style.display   = isFull ? '' : 'none';
+  document.getElementById('bt-custom-opts').style.display = isFull ? 'none' : '';
+  const lblFull   = document.getElementById('bt-lbl-full');
+  const lblCustom = document.getElementById('bt-lbl-custom');
+  if(lblFull)   lblFull.classList.toggle('active', isFull);
+  if(lblCustom) lblCustom.classList.toggle('active', !isFull);
+}
+
+// Backtest
+async function runBacktest(){
+  setBtn('bt-btn','<span class="sp"></span> 실행 중…',true);
+  const isFull = document.getElementById('bt-mode-full').checked;
+  let payload = {};
+  if(isFull){
+    payload = {mode:'full', tier_filter: document.getElementById('bt-tier').value};
+  } else {
+    const raw = document.getElementById('bt-tickers').value.trim();
+    if(!raw){ alert('티커를 입력해주세요. 예) AAPL MSFT NVDA'); setBtn('bt-btn','▶ 백테스트 실행',false); return; }
+    payload = {mode:'custom', tickers: raw};
+  }
+  const d=await apiPost('backtest_bg', payload);
+  if(!d.job_id){
+    const b=document.getElementById('bt-log');b.className='logbox on';
+    b.innerHTML='<div class="le">❌ '+(d.error||'실행 실패')+'</div>';
+    setBtn('bt-btn','▶ 백테스트 실행',false);return;
+  }
+  await pollJob(d.job_id,'bt-log','bt-prog',r=>{
+    setBtn('bt-btn','▶ 백테스트 실행',false);
+    if(r&&r.ok){
+      if(r.top_tickers&&r.top_tickers.length){
+        document.getElementById('sig-chips').innerHTML=
+          r.top_tickers.map(t=>`<span class="chip">${t}</span>`).join('');
+        document.getElementById('sig-card').style.display='block';
+        // 종목 수 표시
+        const cnt=document.getElementById('sig-count');
+        if(cnt) cnt.textContent=r.n_tickers+'종목';
+      }
+      if(r.html)showRes('bt-res','bt-frm',r.html);
+    }
+  });
+}
+async function loadSigs(){
+  const d=await apiPost('load_signals');
+  if(d.top_tickers&&d.top_tickers.length){
+    document.getElementById('sig-chips').innerHTML=
+      d.top_tickers.map(t=>`<span class="chip">${t}</span>`).join('');
+    document.getElementById('sig-card').style.display='block';
+    const b=document.getElementById('bt-log');b.className='logbox on';b.innerHTML='';
+    addLine(b,'📥 저장 신호: '+d.top_tickers.join(', '));
+    addLine(b,'생성: '+(d.generated_at||'—').slice(0,16));
+  }else{
+    const b=document.getElementById('bt-log');b.className='logbox on';b.innerHTML='';
+    addLine(b,'저장된 신호 없음 → 백테스트 먼저 실행');
+  }
+}
+function sigToTrading(){
+  const chips=[...document.querySelectorAll('#sig-chips .chip')];
+  document.getElementById('cmd-tk').value=chips.map(c=>c.textContent).join(', ');sw(4);
+}
+
+// Commander
+async function runCmd(){
+  let tk=document.getElementById('cmd-tk').value.trim();
+  if(!tk){
+    const d=await apiPost('load_signals');tk=(d.top_tickers||[]).join(', ');
+    if(!tk){alert('티커 없음 → 직접 입력하거나 Backtest 먼저 실행');return;}
+    document.getElementById('cmd-tk').value=tk;
+  }
+  setBtn('cmd-btn','<span class="sp"></span> 계산 중…',true);
+  const d=await apiPost('commander_bg',{
+    tickers:tk,capital:+document.getElementById('cmd-cap').value,
+    strategy:document.getElementById('cmd-st').value});
+  if(!d.job_id){
+    const b=document.getElementById('cmd-log');b.className='logbox on';
+    b.innerHTML='<div class="le">❌ '+(d.error||'실행 실패')+'</div>';
+    setBtn('cmd-btn','▶ 포지션 계산',false);return;
+  }
+  await pollJob(d.job_id,'cmd-log',null,r=>{
+    setBtn('cmd-btn','▶ 포지션 계산',false);
+    if(r&&r.ok&&r.html)injectHtml('trd-inject',r.html);
+  });
+}
+async function loadSigTk(){
+  const d=await apiPost('load_signals');
+  if(d.top_tickers&&d.top_tickers.length)
+    document.getElementById('cmd-tk').value=d.top_tickers.join(', ');
+  else alert('신호 없음 → Backtest 먼저 실행');
+}
+
+// Tracker
+async function runTracker(){
+  const b=document.getElementById('trk-log');b.className='logbox on';b.innerHTML='';
+  const inj=document.getElementById('trd-inject');
+  addLine(b,'📈 P&L 조회 중…');
+  const d=await apiPost('tracker');
+  if(d.log){d.log.split('\n').filter(Boolean).forEach(l=>addLine(b,l));}
+  if(d.ok&&d.html&&inj){
+    try{
+      const res=await fetch('/'+d.html+'?t='+Date.now());
+      const raw=await res.text();
+      const m=raw.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+      inj.innerHTML=m?m[1]:raw;
+      inj.scrollIntoView({behavior:'smooth',block:'start'});
+    }catch(e){inj.innerHTML='<p style="color:var(--red);padding:20px">❌ 로드 실패: '+e+'</p>';}
+  }else if(!d.ok) addLine(b,'❌ '+(d.log||'실패'));
+}
+function showAddPos(){
+  const f=document.getElementById('add-pos');
+  f.style.display=f.style.display==='none'?'block':'none';
+  document.getElementById('pos-dt').value=new Date().toISOString().slice(0,10);
+}
+async function doAddPos(){
+  const tk=document.getElementById('pos-tk').value.trim().toUpperCase();
+  const sh=+document.getElementById('pos-sh').value;
+  const cost=+document.getElementById('pos-cost').value;
+  const dt=document.getElementById('pos-dt').value;
+  const note=document.getElementById('pos-note').value;
+  if(!tk||!sh||!cost){alert('티커·수량·단가 필수');return;}
+  const d=await apiPost('add_position',{ticker:tk,shares:sh,avg_cost:cost,buy_date:dt,note});
+  const b=document.getElementById('trk-log');b.className='logbox on';b.innerHTML='';
+  if(d.ok){
+    addLine(b,`✅ ${tk} 추가 완료`);
+    if(d.sl)addLine(b,`SL: $${d.sl.toFixed(2)}  TP: ${d.tp?'$'+d.tp.toFixed(2):'—'}`);
+    document.getElementById('add-pos').style.display='none';location.reload();
+  }else addLine(b,'❌ '+(d.error||''));
+}
+async function doRemovePos(){
+  const tk=prompt('청산할 티커:');if(!tk)return;
+  const d=await apiPost('remove_position',{ticker:tk.trim().toUpperCase()});
+  const b=document.getElementById('trk-log');b.className='logbox on';b.innerHTML='';
+  addLine(b,d.ok?'✅ '+tk+' 청산':'❌ '+(d.error||''));
+  if(d.ok)location.reload();
+}
+
+// Screener
+async function runScreener(){
+  const mode=document.querySelector('input[name="sc-mode"]:checked');
+  const modeVal=mode?mode.value:'all';
+  const tkInput=document.getElementById('sc-custom-tk');
+  const tickers=modeVal==='custom'?(tkInput?tkInput.value.trim():''):'';
+  if(modeVal==='custom'&&!tickers){
+    alert('티커를 입력해 주세요 (예: AAPL, NVDA, MSFT)');return;
+  }
+  const label=modeVal==='custom'?`직접입력 ${tickers.split(',').filter(t=>t.trim()).length}종목`:'전체 ~3000종목 (3~5분)';
+  setBtn('sc-btn',`<span class="sp"></span> 스캔 중… (${label})`,true);
+  document.getElementById('sc-card').style.display='none';
+  const inj=document.getElementById('sc-chips');if(inj)inj.innerHTML='';
+  const d=await apiPost('screener_bg',{tickers});
+  if(!d.job_id){
+    const b=document.getElementById('sc-log');b.className='logbox on';
+    b.innerHTML='<div class="le">❌ '+(d.error||'실행 실패')+'</div>';
+    setBtn('sc-btn','▶ 스크리닝 실행',false);return;
+  }
+  await pollJob(d.job_id,'sc-log','sc-prog',r=>{
+    setBtn('sc-btn','▶ 스크리닝 실행',false);
+    if(r&&r.ok&&r.tickers&&r.tickers.length){
+      const chips=document.getElementById('sc-chips');
+      if(chips) chips.innerHTML=r.tickers.map(t=>`<span class="chip">${t}</span>`).join('');
+      document.getElementById('sc-card').style.display='block';
+      const cnt=document.getElementById('sc-count');
+      if(cnt)cnt.textContent=r.count+'종목';
+    }
+  });
+}
+async function loadScreenerResult(){
+  const d=await apiPost('load_screener');
+  const tickers=d.tickers||[];
+  if(tickers.length){
+    const chips=document.getElementById('sc-chips');
+    if(chips)chips.innerHTML=tickers.map(t=>`<span class="chip">${t}</span>`).join('');
+    document.getElementById('sc-card').style.display='block';
+    const cnt=document.getElementById('sc-count');if(cnt)cnt.textContent=d.count+'종목';
+    const gen=d.generated_at?d.generated_at.slice(0,16):'';
+    const b=document.getElementById('sc-log');b.className='logbox on';b.innerHTML='';
+    addLine(b,'📥 저장 결과 로드: '+gen);
+  }else{
+    const b=document.getElementById('sc-log');b.className='logbox on';b.innerHTML='';
+    addLine(b,'저장된 스크리닝 결과 없음 → 스크리닝 먼저 실행');
+  }
+}
+function scModeChange(radio){
+  const inp=document.getElementById('sc-custom-tk');
+  const lbl_all=document.getElementById('sc-lbl-all');
+  const lbl_custom=document.getElementById('sc-lbl-custom');
+  const isCustom=radio.value==='custom';
+  if(inp){
+    inp.disabled=!isCustom;
+    inp.style.opacity=isCustom?'1':'0.4';
+    inp.style.cursor=isCustom?'text':'not-allowed';
+    if(isCustom) setTimeout(()=>inp.focus(),50);
+  }
+  if(lbl_all) lbl_all.style.borderColor=isCustom?'var(--border)':'var(--accent)';
+  if(lbl_custom) lbl_custom.style.borderColor=isCustom?'var(--accent)':'var(--border)';
+}
+function scToTrading(){
+  const chips=[...document.querySelectorAll('#sc-chips .chip')];
+  document.getElementById('cmd-tk').value=chips.map(c=>c.textContent).join(', ');sw(4);}
+
+// Sentiment
+async function runSent(){
+  const tk=document.getElementById('sent-tk').value.trim();
+  setBtn('sent-btn','<span class="sp"></span> 스캔 중…',true);
+  const d=await apiPost('sentiment_bg',{tickers:tk});
+  if(!d.job_id){
+    const b=document.getElementById('sent-log');b.className='logbox on';
+    b.innerHTML='<div class="le">❌ '+(d.error||'')+'</div>';
+    setBtn('sent-btn','▶ 감성 스캔',false);return;
+  }
+  await pollJob(d.job_id,'sent-log',null,r=>{
+    setBtn('sent-btn','▶ 감성 스캔',false);
+    if(r&&r.ok&&r.html)injectHtml('trd-inject',r.html);
+  });
+}
+</script>
+</body></html>
