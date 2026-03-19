@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Local editor / OS
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Runtime caches
+.bt_cache/
+.bt_cache_v10/
+.bt_cache_v11/
+.bt_cache_v12/
+.bt_cache_v12b/
+.price_cache.pkl
+ta_audit/
+
+# Local logs / reports
+zeus_audit_log.json
+zeus_log.csv
+
+# Local-only folders not needed for GitHub Pages deploy
+Foundaion/
+zeus_I/
+zeus_open/
+
+# Generated local outputs
+zeus_integrated_dashboard.html
+zeus_integrated_out_dashboard.html
+zeus_integrated_out_analyzer.html
+zeus_integrated_out_backtest.html
+zeus_integrated_out_trading.html
+market_dashboard.html
+backtest_smartscore.html
+backtest_*.html
+commander_report.html
+zeus_out_dashboard.html
+zeus_out_analyzer.html
+zeus_out_backtest.html
+zeus_out_trading.html
+zeus_report.html
+zeus_sentiment_factors.json
+
+# Keep GitHub Pages deploy artifacts
+!docs/
+!docs/**
+
+# Keep public result snapshots used by docs export if tracked separately
+!README.md
+!GITHUB_PAGES_DEPLOY.md
