@@ -13,8 +13,10 @@ v2 변경사항:
     py zeus_integrated_dashboard.py --server        HTTP 서버 (포트 8876) ★권장
     py zeus_integrated_dashboard.py --server --live  + 5분 자동갱신
     py zeus_integrated_dashboard.py                  HTML 파일만 생성
-    cd <project-dir>
     py -3 zeus_integrated_dashboard.py
+    git add zeus_integrated_dashboard.py docs
+    git commit -m "Restore local execution mode" 깃허브 반영
+    git push
 """
 from __future__ import annotations
 
@@ -56,7 +58,7 @@ SCREENER_JSON   = HERE / "screener_results.json"  # screener.py 결과 파이프
 
 PORT        = 8876
 REFRESH_SEC = 300
-PUBLIC_SITE = True
+PUBLIC_SITE = False
 PUBLIC_BIND_HOST = "0.0.0.0"
 
 # ── 파일명 후보 ──────────────────────────────────────────────────────
@@ -1129,6 +1131,35 @@ async function runSent(){
 }
 </script>"""
 
+_STATIC_JS = r"""<script>
+function sw(n){
+  for(let i=0;i<5;i++){
+    const tab=document.getElementById('t'+i);
+    const pnl=document.getElementById('p'+i);
+    if(tab) tab.classList.toggle('on',i===n);
+    if(pnl) pnl.classList.toggle('on',i===n);
+  }
+  try{localStorage.setItem('zt',n);}catch(e){}
+}
+(() => {
+  let n = 0;
+  try{ n = +localStorage.getItem('zt') || 0; }catch(e){}
+  sw(n);
+})();
+(function tick(){
+  const el=document.getElementById('clk');
+  if(el){
+    const n=new Date(Date.now()+9*3600e3);
+    el.textContent='KST '+n.toISOString().replace('T',' ').slice(0,19);
+  }
+  setTimeout(tick,1000);
+})();
+function loadScreenerResult(){
+  const card=document.getElementById('sc-card');
+  if(card) card.style.display='block';
+}
+</script>"""
+
 def _wrap_dark(title, body):
     return (f'<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">'
             f'<meta name="viewport" content="width=device-width,initial-scale=1">'
@@ -1754,7 +1785,7 @@ def build_unified_html(static_mode: bool = False):
     sc_data=_load_screener()
     top_tks=sigs.get("top_tickers",[]); sig_dt=sigs.get("generated_at","")[:10]
     sc_tks=sc_data.get("tickers",[]) if isinstance(sc_data,dict) else []
-    sc_display="display:block" if sc_tks else "display:none"
+    sc_display="display:block" if (sc_tks or static_mode) else "display:none"
     sc_chips_html="".join(f'<span class="chip">{t}</span>' for t in sc_tks[:20])
     sc_generated=(sc_data.get("generated_at","")[:16] if isinstance(sc_data,dict) else "")
     an_generated = datetime.fromtimestamp(OUT_AN.stat().st_mtime).strftime("%Y-%m-%d %H:%M") if OUT_AN.exists() else ""
@@ -1835,6 +1866,7 @@ function closeSectorDetail(ev){{
 }}
 </script>"""
 
+    js_bundle = _STATIC_JS if static_mode else _JS
     return f"""<!DOCTYPE html>
 <html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ZEUS Integrated Dashboard</title>{_CSS}{dashboard_style}</head><body data-public-analyzer="{1 if analyzer_enabled else 0}">
@@ -2059,7 +2091,7 @@ function closeSectorDetail(ev){{
   </div>
   {trading_overview}
 </div>
-{_JS}{dashboard_script}
+{js_bundle}{dashboard_script}
 </body></html>"""
 
 def export_github_pages() -> None:
@@ -2210,6 +2242,7 @@ def _open(url):
 def main():
     live   = "--live"   in sys.argv
     server = "--server" in sys.argv
+    no_open = "--no-open" in sys.argv
     print("\n"+"═"*56+"\n  ⚡ ZEUS INTEGRATED DASHBOARD  v2.1\n"+"="*56)
     print("\n  📦 모듈 로딩…"); load_all()
     if _MODS.get("dashboard") and not OUT_DASH.exists():
@@ -2220,10 +2253,14 @@ def main():
     print(f"  🌍 GitHub Pages 폴더: {GH_PAGES_DIR}")
     if server:
         bind_host = PUBLIC_BIND_HOST if PUBLIC_SITE else ""
-        public_hint = f"http://<your-server-ip-or-domain>:{PORT}" if PUBLIC_SITE else f"http://localhost:{PORT}"
-        print(f"\n  🌐 {public_hint}  (Ctrl+C 종료)\n")
-        if not PUBLIC_SITE:
-            _open(f"http://localhost:{PORT}")
+        local_hint = f"http://localhost:{PORT}"
+        public_hint = f"http://<your-server-ip-or-domain>:{PORT}" if PUBLIC_SITE else local_hint
+        print(f"\n  🌐 local: {local_hint}")
+        if PUBLIC_SITE:
+            print(f"  🌍 public: {public_hint}")
+        print("  (Ctrl+C 종료)\n")
+        if not no_open:
+            _open(local_hint)
         _stop_event = threading.Event()
 
         if live:

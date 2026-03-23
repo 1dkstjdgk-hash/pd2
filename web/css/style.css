@@ -1,0 +1,131 @@
+@font-face {
+    font-family: 'Jalnan2';
+    src: url('../assets/fonts/Jalnan2TTF.ttf') format('truetype');
+}
+
+* { box-sizing: border-box; }
+
+body, html {
+    margin: 0; padding: 0;
+    font-family: 'Jalnan2', sans-serif;
+    background-color: #f1f3f5;
+    color: #333;
+}
+
+.main-wrapper {
+    display: flex;
+    width: 100%;
+    height: 850px;
+    background: white;
+}
+
+/* 입력 섹션 스타일 */
+.input-section {
+    flex: 1.4;
+    min-width: 650px;
+    background: white;
+    padding: 35px;
+    border-right: 1px solid #e9ecef;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+h1 { margin: 0 0 25px 0; font-size: 1.8rem; letter-spacing: -1px; color: #1a1a1a; }
+
+/* 배경 분석 UI */
+.config-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    border: 1px dashed #ced4da;
+}
+
+.theme-inline { display: flex; align-items: center; gap: 20px; margin-bottom: 10px; }
+.theme-results-inline { display: flex; align-items: center; gap: 15px; background: white; padding: 8px 15px; border-radius: 10px; border: 1px solid #eee; }
+.circle-container { display: flex; gap: 6px; }
+.color-circle { width: 22px; height: 22px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1); }
+.color-meta { display: flex; align-items: center; gap: 8px; border-left: 1px solid #eee; padding-left: 12px; }
+.color-swatch { width: 18px; height: 18px; border-radius: 4px; border: 1px solid #ddd; }
+.mini-label { font-size: 12px; color: #868e96; font-weight: bold; }
+.help-text { font-size: 12px; color: #adb5bd; margin: 0; }
+
+/* 테이블 및 입력필드 (사용자 요청 너비 반영) */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 25px;
+    border: 1px solid #f1f3f5;
+    border-radius: 12px;
+}
+
+table { width: 100%; border-collapse: collapse; min-width: 620px; }
+th { padding: 12px; font-size: 13px; color: #adb5bd; border-bottom: 2px solid #eee; text-align: center; }
+td { padding: 10px 5px; border-bottom: 1px solid #f8f9fa; }
+
+input, select {
+    font-family: 'Jalnan2';
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+input:focus { border-color: #339af0; outline: none; }
+
+/* 너비 조정 핵심 */
+select.day { width: 80px !important; } 
+.time-group { display: flex; align-items: center; gap: 4px; justify-content: center; }
+.time-group select { width: 58px !important; padding: 6px; font-size: 13px; text-align: center; }
+
+/* 버튼 스타일 */
+.action-bar { display: flex; gap: 12px; }
+.btn { 
+    font-family: 'Jalnan2'; border: none; border-radius: 12px; 
+    cursor: pointer; padding: 16px; font-size: 1.1rem; transition: all 0.2s;
+}
+.add-btn { background: #f1f3f5; color: #495057; flex: 1; }
+.add-btn:hover { background: #e9ecef; }
+.submit-btn { background: #339af0; color: white; flex: 2; font-weight: bold; }
+.submit-btn:hover { background: #228be6; box-shadow: 0 4px 12px rgba(51,154,240,0.3); }
+
+/* 오른쪽 미리보기 */
+.preview-section {
+    flex: 1;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#timetableCanvas {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+.preview-hint { margin-top: 15px; color: #adb5bd; font-size: 13px; text-align: center; }
+
+/* 하단 합성 영역 (플로팅 레이아웃 전용) */
+.composite-section { padding: 60px 20px; background: #212529; }
+.composite-inner { max-width: 1100px; margin: 0 auto; }
+.composite-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; color: white; }
+.composite-header h2 { margin: 0; font-size: 3rem; } /* 1.5rem → 3rem (2배) */
+.download-btn { background: #40c057; color: white; padding: 10px 20px; font-size: 30px; } /* 15px → 30px (2배) */
+.download-btn:hover { background: #37b24d; }
+
+.composite-frame {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 25px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+#compositeCanvas { width: 100%; height: 100%; object-fit: cover; display: block; }
+.composite-placeholder {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    color: #495057; font-size: 2.4rem; background: #1a1a1a;
+} /* 1.2rem → 2.4rem (2배) */

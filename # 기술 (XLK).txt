@@ -1,0 +1,127 @@
+# 기술 (XLK)
+    "XLK": [
+        "AAPL","MSFT","NVDA","AVGO","ORCL","CRM","ACN","CSCO","IBM","TXN",
+        "QCOM","AMAT","LRCX","KLAC","MU","ADI","MRVL","INTC","ON","STX",
+        "PSTG","NTAP","HPE","JNPR","VIAV","FORM","COHU","ACLS","ONTO","CAMT",
+        "SITM","ALGM","SLAB","DIOD","AMBA","DUOL","ZM","U","SERV","ARAI","SOUN",
+    ],
+    # 임의소비재 (XLY)
+    "XLY": [
+        "AMZN","TSLA","HD","MCD","NKE","SBUX","LOW","TJX","BKNG","CMG",
+        "EBAY","ETSY","RH","WSM","RVLV","BOOT","XPOF","VSCO",
+        "FIVE","OLLI","BIG","CONN","CAKE","DRI","TXRH","BJRI","FWRG",
+    ],
+    # 금융 (XLF)
+    "XLF": [
+        "JPM","BAC","WFC","GS","MS","BLK","SCHW","AXP","CB","PGR",
+        "MET","PRU","AFL","CINF","GL","SFG","WRB","HIG","FNF",
+        "NYCB","PACW","WAL","BKU","CADE","FFIN","TOWN","HOMB","FULT","WSFS",
+        "LPLA","RJF","PIPR","SF",
+    ],
+    # 헬스케어 (XLV)
+    "XLV": [
+        "LLY","UNH","JNJ","ABBV","MRK","TMO","ABT","DHR","BMY","AMGN",
+        "GILD","REGN","VRTX","BIIB","ILMN","IDXX","IQV","CRL","MEDP","HALO",
+        "ACAD","ARWR","BEAM","NTLA","EDIT","CRSP","FATE","KYMR","TMDX","RXRX",
+        "SANA","VERV","IMVT","RVMD",
+    ],
+    # 에너지 (XLE)
+    "XLE": [
+        "XOM","CVX","COP","EOG","SLB","PXD","MPC","PSX","VLO","OXY",
+        "DVN","FANG","HAL","BKR","NOV","RIG","VAL","BORR","PTEN","NE",
+        "SM","CPE","REI","SWN","RRC","CNX","AR","CIVI","MTDR","ROCC",
+        "TALO","NEXT","VTLE","NNE","USEG",
+    ],
+    # 산업 (XLI)
+    "XLI": [
+        "CAT","DE","HON","UPS","RTX","BA","GE","MMM","EMR","ETN",
+        "PH","ROK","XYL","GNRC","AIRC","REVG","SHYF","ARCB","SAIA","ODFL",
+        "JBHT","WERN","CHRW","GXO","RXO","SNDR","TFII","HTLD","MRTN","USX",
+        "MATX","KEX","SALT","BWXT","DRS",
+    ],
+    # 소재 (XLB)
+    "XLB": [
+        "LIN","APD","SHW","FCX","NEM","NUE","STLD","RS","VMC","MLM",
+        "CF","MOS","IPI","RYAM","SLVM","TROX","KRO","HBM","TECK","AA",
+        "CENX","CRS","HAYN","KALU","MTAL","MP","UUUU","NXE","DNN","URG",
+    ],
+    # 부동산 (XLRE)
+    "XLRE": [
+        "AMT","PLD","CCI","EQIX","PSA","SPG","O","WELL","AVB","EQR",
+        "MAA","UDR","NNN","STOR","EPRT","NTST","PINE","LAND","AFCG","STWD",
+        "BRSP","SACH","GPMT","TRTX","FBRT","RC","BXMT","KREF","ARI","MFA",
+    ],
+    # 필수소비재 (XLP)
+    "XLP": [
+        "PG","KO","PEP","COST","WMT","PM","MO","KMB","CL","GIS",
+        "SJM","CAG","MKC","HRL","LW","SMPL","FRPT","UTZ","NWFL","PFGC",
+        "USFD","SYY","CHEF","COKE","FIZZ","CELH","MNST","KDP",
+    ],
+    # 유틸리티 (XLU)
+    "XLU": [
+        "NEE","DUK","SO","D","AEP","EXC","SRE","PCG","XEL","WEC",
+        "ES","CMS","NI","EVRG","ATO","OGE","NWE","RUN","NOVA",
+        "ARRY","ENPH","SEDG","SHLS","FTCI","CWEN","BEP","FLNC","STEM",
+    ],
+    # 통신 (XLC)
+    "XLC": [
+        "META","GOOGL","NFLX","DIS","CMCSA","T","VZ","TMUS","CHTR","FOX",
+        "PARA","WBD","LYV","SIRI","LUMN","IRDM","GSAT","DISH","AMCX",
+        "MSGM","FUBO","DOYU","HUYA",
+    ],
+    # 방산 (ITA)
+    "ITA": [
+        "LMT","RTX","NOC","GD","BA","HII","TXT","HEI","LDOS","SAIC",
+        "BAH","CACI","MANT","PSN","DRS","BWXT","KTOS","AVAV","RCAT","JOBY",
+        "ACHR","BLDE","AXON","ATRO","CPI",
+    ],
+    # 항공우주 (XAR)
+    "XAR": [
+        "RTX","BA","LMT","GD","NOC","HEI","TXT","AXON","KTOS","AVAV",
+        "RCAT","JOBY","ACHR","ASTR","AIR","ESLT",
+        "ATRO","MOOG","CPI","DRS","VSE","LDOS","SAIC","BAH","SATL","SIDU","FLY",
+    ],
+    # 반도체 (SOXX)
+    "SOXX": [
+        "NVDA","AMD","AVGO","QCOM","MU","AMAT","LRCX","KLAC","ADI","MRVL",
+        "INTC","ON","TXN","MPWR","WOLF","SITM","ALGM","SLAB","DIOD","AMBA",
+        "ACLS","ONTO","CAMT","FORM","COHU","POWI","IOSP","SWKS","QRVO","MTSI",
+        "IXYS","AEHR","OLED","AXTI","PDFS","ALAB",
+    ],
+    # 사이버보안 (CIBR)
+    "CIBR": [
+        "PANW","CRWD","ZS","FTNT","CYBR","S","OKTA","TENB","QLYS","VRNT",
+        "RPD","SAIL","RDWR","ACLS","CWAN","ASAN","BB","SCWX",
+        "MIME","EVTC","IMMR","XPEL",
+    ],
+    # 클라우드 (SKYY)
+    "SKYY": [
+        "AMZN","MSFT","GOOGL","CRM","NOW","WDAY","TEAM","ZM","DOCU","MDB",
+        "SNOW","DDOG","NET","HUBS","BILL","CFLT","GTLB","ESTC","APPN","PEGA",
+        "NCNO","ALTR","ASAN","SMAR","FROG","BRZE","SPRK","CODA","PAYO","TASK",
+    ],
+    # 바이오 (XBI)
+    "XBI": [
+        "MRNA","BNTX","REGN","VRTX","BIIB","GILD","AMGN","ILMN","BEAM","NTLA",
+        "EDIT","CRSP","FATE","KYMR","TMDX","RXRX","SANA","VERV","PRME","IMVT",
+        "RVMD","ACAD","ARWR","HALO","MEDP","INSM","NTRA","EXAS","PCVX","RCKT",
+        "LEGN","ALDX","YMAB","PRAX","APLS",
+    ],
+    # 리튬/배터리 (LIT)
+    "LIT": [
+        "ALB","SQM","LTHM","LAC","PLL","SGML","ATLX","LI","NIO",
+        "XPEV","RIVN","LCID","CHPT","BLNK","EVGO","FREYR","MVST",
+        "NRGV","FLUX","ACMR","MP","CQQQ",
+    ],
+    # 핀테크 (FINX)
+    "FINX": [
+        "V","MA","PYPL","SQ","AFRM","UPST","LC","OPEN","SOFI","NRDS",
+        "HOOD","COIN","MSTR","RIOT","MARA","HUT","BTBT","CIFR","BITF","WULF",
+        "IREN","CLSK","CORZ","SDIG",
+    ],
+    # 청정에너지 (ICLN)
+    "ICLN": [
+        "NEE","ENPH","SEDG","FSLR","PLUG","BE","CWEN","BEP","ARRY","SHLS",
+        "FTCI","NOVA","RUN","SPWR","MAXN","CSIQ","JKS","DQ","SOL","HASI",
+        "GPRE","REX","ALTO","AMRC","CLNE","GEVO",
+    ],

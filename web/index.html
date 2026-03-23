@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로페셔널 시간표 에디터</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="main-wrapper">
+    <div class="input-section">
+        <header>
+            <h1>🗓 시간표 에디터</h1>
+        </header>
+
+        <div class="config-section">
+            <h3>🖼 배경 테마 분석</h3>
+            <div class="theme-inline">
+                <input type="file" id="bgInput" accept="image/*" onchange="analyzeImage(event)">
+                <div id="themeResultsInline" class="theme-results-inline" style="display: none;">
+                    <div class="circle-container" id="paletteCircles"></div>
+                    <div class="color-meta">
+                        <span class="mini-label">글자</span>
+                        <div class="color-swatch" id="textSwatch"></div>
+                        <span class="mini-label">격자</span>
+                        <div class="color-swatch" id="gridSwatch"></div>
+                    </div>
+                </div>
+            </div>
+            <p class="help-text">이미지를 업로드하면 최적의 컬러 팔레트를 추출합니다.</p>
+        </div>
+
+        <div class="table-container">
+            <table id="scheduleTable">
+                <thead>
+                    <tr>
+                        <th style="width: 85px;">요일</th>
+                        <th style="width: 120px;">과목명</th>
+                        <th style="width: 210px;">시간 설정</th>
+                        <th>강의실 상세</th>
+                        <th style="width: 40px;"></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="action-bar">
+            <button class="btn add-btn" onclick="addRow()">+ 줄 추가</button>
+            <button class="btn submit-btn" onclick="renderAll()">업데이트 ▶</button>
+        </div>
+    </div>
+
+    <div class="preview-section">
+        <div id="canvasWrapper">
+            <canvas id="timetableCanvas"></canvas>
+            <p class="preview-hint">※ 왼쪽은 기본 레이아웃 확인용입니다.</p>
+        </div>
+    </div>
+</div>
+
+<div class="composite-section">
+    <div class="composite-inner">
+        <div class="composite-header">
+            <h2>🖼 배경화면 합성 결과 (Floating Style)</h2>
+            <button class="btn download-btn" onclick="downloadComposite()" id="downloadBtn" style="display:none;">
+                ⬇ 결과 저장하기 (.png)
+            </button>
+        </div>
+        <div class="composite-frame" id="compositeFrame">
+            <canvas id="compositeCanvas"></canvas>
+            <div class="composite-placeholder" id="compositePlaceholder">
+                <span>배경 이미지를 업로드하면 합성 결과가 여기에 표시됩니다</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
